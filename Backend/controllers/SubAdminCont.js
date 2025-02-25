@@ -70,3 +70,46 @@ export const loginSubAdmin = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+// Get all sub-admins
+export const getSubAdmins = async (req, res) => {
+    try {
+        const subAdmins = await SubAdmin.find();
+        return res.status(200).json({ subAdmins });
+    } catch (error) {
+        console.error('Error fetching sub-admins:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// Updatesubadmin
+export const Updatesubadmin = async (req, res) => {
+    const { id } = req.params;
+    const { name, email, branch } = req.body;
+
+    try {
+        const updatedSubAdmin = await SubAdmin.findByIdAndUpdate(id, { name, email, branch }, { new: true });
+        return res.status(200).json({ message: 'Sub-admin updated successfully', subAdmin: updatedSubAdmin });
+    } catch (error) {
+        console.error('Error updating sub-admin:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// Delete a sub-admin by ID
+
+export const Deletesubadmin = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedSubAdmin = await SubAdmin.findByIdAndDelete(id);
+        if (!deletedSubAdmin) {
+            return res.status(404).json({ message: 'Sub-admin not found' });
+        }
+
+        return res.status(200).json({ message: 'Sub-admin deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting sub-admin:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};

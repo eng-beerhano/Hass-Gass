@@ -98,3 +98,21 @@ export const deleteBranch = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+// Get truck orders in this branch
+export const getTruckOrders = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const branch = await Branch.findById(id);
+        if (!branch) {
+            return res.status(404).json({ message: 'Branch not found' });
+        }
+
+        const truckOrders = branch.truckOrders;
+        return res.status(200).json({ truckOrders });
+    } catch (error) {
+        console.error('Error getting truck orders:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
